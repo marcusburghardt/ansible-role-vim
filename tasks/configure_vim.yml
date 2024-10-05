@@ -1,0 +1,27 @@
+---
+- name: "{{ role_name }} | {{ task.name }} | Ensure the VIM user config directory"
+  ansible.builtin.file:
+    path: "{{ vim_user_config_dir }}"
+    state: directory
+    mode: '0750'
+  register: result_vim_user_config_dir
+
+- name: "{{ role_name }} | {{ task.name }} | Ensure user VIM settings"
+  ansible.builtin.lineinfile:
+    dest: "{{ vim_user_config_file }}"
+    state: "{{ item.state }}"
+    line: "{{ item.line }}"
+    mode: '0600'
+    create: true
+  loop: "{{ vim_user_config }}"
+  when:
+    - item.enabled
+    - result_vim_user_config_dir is success
+
+- name: "{{ role_name }} | {{ task.name }} | Set VIM as default editor"
+  ansible.builtin.lineinfile:
+    dest: "{{ ansible_facts['user_dir'] }}/.bashrc"
+    state: present
+    line: "export EDITOR=vim"
+    mode: '0640'
+...

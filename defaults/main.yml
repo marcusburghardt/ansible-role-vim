@@ -1,0 +1,43 @@
+---
+# Role Defaults
+vim_tasks:
+  - { enabled: true, name: 'install_vim' }
+  - { enabled: true, name: 'configure_vim' }
+
+vim_user_config_dir: "{{ ansible_facts['user_dir'] }}/.vim"
+vim_user_config_file: "{{ vim_user_config_dir }}/vimrc"
+
+# These are settings for the "user" section inside the git config file.
+vim_user_config: 
+  # Enable type file detection and better readability
+  - { enabled: true, state: 'present', line: 'filetype on' }
+  - { enabled: true, state: 'present', line: 'filetype indent on' }
+  - { enabled: true, state: 'present', line: 'filetype plugin on' }
+  - { enabled: true, state: 'present', line: 'syntax on' }
+  # Better search
+  - { enabled: true, state: 'present', line: 'set incsearch' }
+  - { enabled: true, state: 'present', line: 'set ignorecase' }
+  - { enabled: true, state: 'present', line: 'set smartcase' }
+  - { enabled: true, state: 'present', line: 'set showmatch' }
+  - { enabled: true, state: 'present', line: 'set hlsearch' }
+  # Show number lines
+  - { enabled: true, state: 'present', line: 'set number' }
+  - { enabled: true, state: 'present', line: 'set cursorcolumn' }
+  - { enabled: true, state: 'present', line: 'set cursorline' }
+  # Use space instead of tab
+  - { enabled: true, state: 'present', line: 'set expandtab' }
+  - { enabled: true, state: 'present', line: 'set tabstop=4' }
+  - { enabled: true, state: 'present', line: 'set shiftwidth=4' }
+  # History. Good specially if you eventually use complex commands
+  - { enabled: true, state: 'present', line: 'set history=1000' }
+  # Autocomplete
+  - { enabled: true, state: 'present', line: 'set wildmenu' }
+  - { enabled: true, state: 'present', line: 'set wildmode=list:longest' }
+  - { enabled: true, state: 'present', line: 'set wildignore=*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx' }
+  # Status line
+  #- { enabled: true, state: 'present', line: 'set statusline+=\ row:\ %l\ col:\ %c\ percent:\ %p%%' }
+  # Good for Ansible
+  - { enabled: true, state: 'present',
+      line: 'autocmd FileType yaml setlocal ai ts=2 sw=2 et nu cuc' }
+  - { enabled: true, state: 'present',
+      line: 'autocmd FileType yaml colo desert' }
