@@ -40,6 +40,7 @@ Example Playbook
 This playbook will prepare everything with the right variables.  
 For this example, lets call this playbook file as "ansible_vim.yml":
 
+```
 ---
 - hosts: linux
   vars:
@@ -48,6 +49,7 @@ For this example, lets call this playbook file as "ansible_vim.yml":
       - { enabled: true,  name: 'configure_vim' }
   roles:
     - marcusburghardt.vim
+```
 
 Considering the inventory file is in the same folder and is called "hosts_git",
 you can now run this command:  
@@ -64,6 +66,6 @@ Author Information
 ------------------
 
 Marcus Burghardt
-- https://buymeacoffee.com/marcusburghardt
-- https://github.com/marcusburghardt/
-- https://www.linkedin.com/in/marcusburghardt/
+- [https://buymeacoffee.com/marcusburghardt](https://buymeacoffee.com/marcusburghardt)
+- [https://github.com/marcusburghardt](https://github.com/marcusburghardt)
+- [https://www.linkedin.com/in/marcusburghardt](https://www.linkedin.com/in/marcusburghardt)
