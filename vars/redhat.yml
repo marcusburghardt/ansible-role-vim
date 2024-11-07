@@ -2,7 +2,14 @@
 # This file has the custom configurations for redhat and fedora.
 
 packages:
+  - vim
   - vim-enhanced
   - vim-filesystem
+  - vim-syntastic-ansible
+  - vim-syntastic-go
+  - qvim-syntastic-python
+  - vim-syntastic-spec
+  - vim-syntastic-xml
+  - vim-syntastic-yaml
 
 ...
