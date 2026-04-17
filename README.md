@@ -1,16 +1,19 @@
 Role Name
 =========
 
-This Ansible Role will ensure the VIM is installed and configured according to the user
-preferences. Settings can be customized through variables. Take a look in the existing
-standards defined in "defaults/main.yml" and overridden them in a Playbook.
+This Ansible Role will ensure VIM is installed and configured according to user
+preferences. Settings can be customized through variables. Take a look at the existing
+defaults defined in `defaults/main.yml` and override them in a Playbook.
 
 This role will:
-- Ensure VIM is installed;
-- Ensure the proper settings in ~/.vim/vimrc;
+- Ensure VIM is installed with enhanced packages and syntastic plugins;
+- Ensure the proper settings in `~/.vim/vimrc`;
+- Set VIM as the default `EDITOR` environment variable;
 
-To install this role:  
-```$ ansible-galaxy role install marcusburghardt.vim```
+To install this role:
+```
+ansible-galaxy role install marcusburghardt.vim
+```
 
 Requirements
 ------------
@@ -20,14 +23,36 @@ Requirements
 Role Variables
 --------------
 
-You can customize your environment in a very simple and centralized way editing some variables in:
-- defaults/main.yml
+You can customize your environment by editing variables in:
+- `defaults/main.yml` -- user-facing defaults (recommended for customization)
+- `vars/*.yml` -- OS-specific and task-specific variables (rarely changed)
 
-In some rare cases, you may change some configuration to reflect your local environment in:
-- vars/*.yml
+Variables can also be set directly in your Playbook, which is the recommended approach
+for per-environment customization. See the Example Playbook section.
 
-Observe that the above variables could be set in your Playbook too, which, IMO is much more elegant. ;)  
-Take a look in the Example Playbook section.
+### Task Control
+
+The `vim_tasks` list controls which tasks are executed. Each entry has an `enabled`
+flag and a `name` that maps to a task file in `tasks/`:
+
+| Task | Description |
+|------|-------------|
+| `install_vim` | Installs VIM and syntastic plugins via OS packages |
+| `configure_vim` | Configures `~/.vim/vimrc` settings and sets `EDITOR=vim` |
+
+### VIM Configuration
+
+The `vim_user_config` list defines vimrc settings managed via `lineinfile`. Each entry
+supports `enabled`, `state` (present/absent), and `line` (the vimrc directive).
+
+Default settings include:
+- Filetype detection and syntax highlighting
+- Incremental, case-smart search with highlighting
+- Line numbers and cursor highlighting
+- Tabs expanded to 4 spaces
+- Command history (1000 entries)
+- Wildmenu autocomplete with file type exclusions
+- YAML-specific indentation and color scheme
 
 Dependencies
 ------------
@@ -37,30 +62,44 @@ None.
 Example Playbook
 ----------------
 
-This playbook will prepare everything with the right variables.  
-For this example, lets call this playbook file as "ansible_vim.yml":
+This playbook will prepare everything with the right variables.
+For this example, lets call this playbook file as `ansible_vim.yml`:
 
-```
+```yaml
 ---
 - hosts: linux
   vars:
-    - git_tasks:
-      - { enabled: true,  name: 'install_vim' }
-      - { enabled: true,  name: 'configure_vim' }
+    vim_tasks:
+      - { enabled: true, name: 'install_vim' }
+      - { enabled: true, name: 'configure_vim' }
   roles:
     - marcusburghardt.vim
 ```
 
-Considering the inventory file is in the same folder and is called "hosts_git",
-you can now run this command:  
-```$ ansible-playbook -K -i hosts_vim ansible_vim.yml```
+Considering the inventory file is in the same folder and is called `hosts_vim`,
+you can now run this command:
+```
+ansible-playbook -K -i hosts_vim ansible_vim.yml
+```
 
 License
 -------
 
-This Source Code Form is subject to the terms of the Mozilla Public
-License, v. 2.0. If a copy of the MPL was not distributed with this
-file, You can obtain one at http://mozilla.org/MPL/2.0/.
+Licensed under the Apache License, Version 2.0.
+See the [LICENSE](LICENSE) file for details.
+
+Release Process
+---------------
+
+This project uses [release-please](https://github.com/googleapis/release-please) for
+automated versioning and changelog generation. Commits to `main` must follow the
+[Conventional Commits](https://www.conventionalcommits.org/) specification.
+
+**How it works:**
+1. Push commits to `main` using conventional prefixes (`feat:`, `fix:`, `chore:`, etc.)
+2. Release-please automatically opens a PR with version bump and changelog updates
+3. Merging the release PR creates a GitHub Release and tag
+4. The Galaxy publish workflow automatically imports the new version to Ansible Galaxy
 
 Author Information
 ------------------
